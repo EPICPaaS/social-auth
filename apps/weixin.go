@@ -22,7 +22,7 @@ import (
 
 	"github.com/astaxie/beego/httplib"
 
-	"github.com/beego/social-auth"
+	"github.com/EPICPaaS/social-auth"
 )
 
 type Weixin struct {
@@ -30,7 +30,7 @@ type Weixin struct {
 }
 
 func (p *Weixin) GetType() social.SocialType {
-	return social.SocialQQ
+	return social.SocialWeixin
 }
 
 func (p *Weixin) GetName() string {
@@ -65,7 +65,7 @@ func (p *Weixin) GetIndentify(tok *social.Token) (string, error) {
 
 var _ social.Provider = new(Weixin)
 
-func NewQQ(clientId, secret string) *Weixin {
+func NewWeixin(clientId, secret string) *Weixin {
 	p := new(Weixin)
 	p.App = p
 	p.ClientId = clientId

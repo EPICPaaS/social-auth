@@ -33,6 +33,7 @@ const (
 	SocialDropbox
 	SocialFacebook
 	SocialWeixin
+	SocialRenren
 	endType
 )
 

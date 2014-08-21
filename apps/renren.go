@@ -1,4 +1,4 @@
-// Copyright 2014 beego authors
+// Copyright 2014 EPICPaaS authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"): you may
 // not use this file except in compliance with the License. You may obtain
@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 //
-// Maintain by https://github.com/slene
+// Maintain by https://github.com/EPICPaaS
 
 package apps
 
@@ -25,24 +25,25 @@ import (
 	"github.com/EPICPaaS/social-auth"
 )
 
-type QQ struct {
+type Renren struct {
 	BaseProvider
 }
 
-func (p *QQ) GetType() social.SocialType {
-	return social.SocialQQ
+func (p *Renren) GetType() social.SocialType {
+	return social.SocialRenren
 }
 
-func (p *QQ) GetName() string {
-	return "QQ"
+func (p *Renren) GetName() string {
+	return "Renren"
 }
 
-func (p *QQ) GetPath() string {
-	return "qq"
+func (p *Renren) GetPath() string {
+	return "renren"
 }
 
-func (p *QQ) GetIndentify(tok *social.Token) (string, error) {
-	uri := "https://graph.z.qq.com/moc2/me?access_token=" + url.QueryEscape(tok.AccessToken)
+func (p *Renren) GetIndentify(tok *social.Token) (string, error) {
+	fmt.Println(tok)
+	uri := "https://graph.renren.com/oauth/token?grant_type=authorization_code&code=" + url.QueryEscape(tok.AccessToken)
 	req := httplib.Get(uri)
 	req.SetTransport(social.DefaultTransport)
 
@@ -63,17 +64,17 @@ func (p *QQ) GetIndentify(tok *social.Token) (string, error) {
 	return vals.Get("openid"), nil
 }
 
-var _ social.Provider = new(QQ)
+var _ social.Provider = new(Renren)
 
-func NewQQ(clientId, secret string) *QQ {
-	p := new(QQ)
+func NewRenren(clientId, secret string) *Renren {
+	p := new(Renren)
 	p.App = p
 	p.ClientId = clientId
 	p.ClientSecret = secret
-	p.Scope = "get_user_info"
-	p.AuthURL = "https://graph.qq.com/oauth2.0/authorize"
-	p.TokenURL = "https://graph.qq.com/oauth2.0/token"
-	p.RedirectURL = social.DefaultAppUrl + "login/qq/access"
+	p.Scope = ""
+	p.AuthURL = "https://graph.renren.com/oauth/authorize"
+	p.TokenURL = "https://graph.renren.com/oauth/token"
+	p.RedirectURL = social.DefaultAppUrl + "login/renren/access"
 	p.AccessType = "offline"
 	p.ApprovalPrompt = "auto"
 	return p

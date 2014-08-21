@@ -25,8 +25,8 @@ import (
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/orm"
 
-	"github.com/beego/social-auth"
-	"github.com/beego/social-auth/apps"
+	"github.com/EPICPaaS/social-auth"
+	"github.com/EPICPaaS/social-auth/apps"
 
 	// just use mysql driver for example
 	_ "github.com/go-sql-driver/mysql"
@@ -113,7 +113,7 @@ func (this *MainRouter) Login() {
 
 func (this *MainRouter) Connect() {
 	this.TplNames = "index.tpl"
-
+	fmt.Println("Here")
 	st, ok := SocialAuth.ReadyConnect(this.Ctx)
 	if !ok {
 		this.Redirect("/login", 302)
@@ -128,6 +128,7 @@ func (this *MainRouter) Connect() {
 		beego.Error(err)
 	} else {
 		SetInfoToSession(this.Ctx, userSocial)
+		fmt.Println(userSocial)
 	}
 
 	this.Redirect(loginRedirect, 302)
@@ -209,6 +210,20 @@ func initialize() {
 	clientId = beego.AppConfig.String("facebook_client_id")
 	secret = beego.AppConfig.String("facebook_client_secret")
 	err = social.RegisterProvider(apps.NewFacebook(clientId, secret))
+	if err != nil {
+		beego.Error(err)
+	}
+
+	clientId = beego.AppConfig.String("weixin_client_id")
+	secret = beego.AppConfig.String("weixin_client_secret")
+	err = social.RegisterProvider(apps.NewWeixin(clientId, secret))
+	if err != nil {
+		beego.Error(err)
+	}
+
+	clientId = beego.AppConfig.String("renren_client_id")
+	secret = beego.AppConfig.String("renren_client_secret")
+	err = social.RegisterProvider(apps.NewRenren(clientId, secret))
 	if err != nil {
 		beego.Error(err)
 	}
