@@ -17,12 +17,13 @@
 package apps
 
 import (
-	"fmt"
-	"net/url"
+	//"fmt"
 
-	"github.com/astaxie/beego/httplib"
-
+	"encoding/json"
 	"github.com/EPICPaaS/social-auth"
+	"github.com/astaxie/beego/httplib"
+	"net/url"
+	"strconv"
 )
 
 type Renren struct {
@@ -42,8 +43,8 @@ func (p *Renren) GetPath() string {
 }
 
 func (p *Renren) GetIndentify(tok *social.Token) (string, error) {
-	fmt.Println(tok)
-	uri := "https://graph.renren.com/oauth/token?grant_type=authorization_code&code=" + url.QueryEscape(tok.AccessToken)
+	//fmt.Println(tok.GetExtra("id"))
+	uri := "https://api.renren.com/v2/user/login/get?access_token=" + url.QueryEscape(tok.AccessToken)
 	req := httplib.Get(uri)
 	req.SetTransport(social.DefaultTransport)
 
@@ -51,17 +52,21 @@ func (p *Renren) GetIndentify(tok *social.Token) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	//fmt.Println(body)
 
-	vals, err := url.ParseQuery(body)
-	if err != nil {
-		return "", err
+	var rd map[string]interface{}
+	err = json.Unmarshal([]byte(body), &rd)
+
+	if err == nil {
+		user := rd["response"].(map[string]interface{})
+
+		uid := user["id"].(float64)
+		//fmt.Println(uid)
+		ruid := strconv.FormatFloat(uid, 'f', -1, 64)
+		//fmt.Println(ruid)
+		return ruid, nil
 	}
-
-	if vals.Get("code") != "" {
-		return "", fmt.Errorf("code: %s, msg: %s", vals.Get("code"), vals.Get("msg"))
-	}
-
-	return vals.Get("openid"), nil
+	return "", err
 }
 
 var _ social.Provider = new(Renren)
