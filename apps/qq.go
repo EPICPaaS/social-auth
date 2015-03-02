@@ -22,6 +22,7 @@ import (
 
 	"github.com/astaxie/beego/httplib"
 
+	"encoding/json"
 	"github.com/EPICPaaS/social-auth"
 )
 
@@ -42,7 +43,8 @@ func (p *QQ) GetPath() string {
 }
 
 func (p *QQ) GetIndentify(tok *social.Token) (string, error) {
-	uri := "https://graph.z.qq.com/moc2/me?access_token=" + url.QueryEscape(tok.AccessToken)
+	uri := "https://graph.qq.com/oauth2.0/me?access_token=" + url.QueryEscape(tok.AccessToken)
+
 	req := httplib.Get(uri)
 	req.SetTransport(social.DefaultTransport)
 
@@ -50,17 +52,18 @@ func (p *QQ) GetIndentify(tok *social.Token) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
-	vals, err := url.ParseQuery(body)
+	bodyLen := len(body)
+	bodySub := body[10 : bodyLen-4]
+	dataMap := make(map[string]string)
+	err = json.Unmarshal([]byte(bodySub), &dataMap)
 	if err != nil {
 		return "", err
 	}
 
-	if vals.Get("code") != "" {
-		return "", fmt.Errorf("code: %s, msg: %s", vals.Get("code"), vals.Get("msg"))
+	if len(dataMap["code"]) != 0 {
+		return "", fmt.Errorf("code: %s, msg: %s", dataMap["code"], dataMap["msg"])
 	}
-
-	return vals.Get("openid"), nil
+	return dataMap["openid"], nil
 }
 
 var _ social.Provider = new(QQ)
