@@ -210,6 +210,10 @@ func (this *SocialAuth) OAuthAccess(ctx *context.Context) (redirect string, user
 			ctx.Input.CruSession.Set("social_connect", int(social))
 
 			redirect = this.ConnectRegisterURL
+			// save new access token if it changed
+			uSocial.PutToken(tok)
+
+			userSocial = &uSocial
 
 		} else if err == nil {
 			if !isLogin {
