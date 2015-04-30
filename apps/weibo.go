@@ -40,6 +40,11 @@ func (p *Weibo) GetIndentify(tok *social.Token) (string, error) {
 	return tok.GetExtra("uid"), nil
 }
 
+//TODO 待完善
+func (p *Weibo) GetUserNname(tok *social.Token) (string, error) {
+	return "", nil
+}
+
 var _ social.Provider = new(Weibo)
 
 func NewWeibo(clientId, secret string) *Weibo {

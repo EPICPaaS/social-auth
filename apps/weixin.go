@@ -63,6 +63,11 @@ func (p *Weixin) GetIndentify(tok *social.Token) (string, error) {
 	return vals.Get("openid"), nil
 }
 
+//TODO 待完善
+func (p *Weixin) GetUserNname(tok *social.Token) (string, error) {
+	return "", nil
+}
+
 var _ social.Provider = new(Weixin)
 
 func NewWeixin(clientId, secret string) *Weixin {

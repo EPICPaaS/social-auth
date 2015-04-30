@@ -40,6 +40,11 @@ func (p *Dropbox) GetIndentify(tok *social.Token) (string, error) {
 	return tok.GetExtra("uid"), nil
 }
 
+//TODO 待完善
+func (p *Dropbox) GetUserNname(tok *social.Token) (string, error) {
+	return "", nil
+}
+
 var _ social.Provider = new(Dropbox)
 
 func NewDropbox(clientId, secret string) *Dropbox {

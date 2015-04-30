@@ -69,6 +69,11 @@ func (p *Renren) GetIndentify(tok *social.Token) (string, error) {
 	return "", err
 }
 
+//TODO 待完善
+func (p *Renren) GetUserNname(tok *social.Token) (string, error) {
+	return "", nil
+}
+
 var _ social.Provider = new(Renren)
 
 func NewRenren(clientId, secret string) *Renren {

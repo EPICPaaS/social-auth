@@ -215,6 +215,13 @@ func (this *SocialAuth) OAuthAccess(ctx *context.Context) (redirect string, user
 
 			userSocial = &uSocial
 
+			userName, err := p.GetUserNname(tok)
+			if err != nil {
+				fmt.Println("userName获取第三方用户名出错")
+				return
+			}
+			ctx.Input.CruSession.Set("custom_userSocial_userName", userName)
+
 		} else if err == nil {
 			if !isLogin {
 				// login user

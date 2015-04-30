@@ -72,6 +72,11 @@ func (p *Github) GetIndentify(tok *social.Token) (string, error) {
 	return fmt.Sprint(vals["id"]), nil
 }
 
+//TODO 待完善
+func (p *Github) GetUserNname(tok *social.Token) (string, error) {
+	return "", nil
+}
+
 var _ social.Provider = new(Github)
 
 func NewGithub(clientId, secret string) *Github {

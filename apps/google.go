@@ -72,6 +72,11 @@ func (p *Google) GetIndentify(tok *social.Token) (string, error) {
 	return fmt.Sprint(vals["id"]), nil
 }
 
+//TODO 待完善
+func (p *Google) GetUserNname(tok *social.Token) (string, error) {
+	return "", nil
+}
+
 var _ social.Provider = new(Google)
 
 func NewGoogle(clientId, secret string) *Google {

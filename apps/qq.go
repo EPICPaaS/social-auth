@@ -66,6 +66,38 @@ func (p *QQ) GetIndentify(tok *social.Token) (string, error) {
 	return dataMap["openid"], nil
 }
 
+func (p *QQ) GetUserNname(tok *social.Token) (string, error) {
+
+	openid, err := p.GetIndentify(tok)
+	if err != nil {
+		return "", err
+	}
+
+	uri := "https://graph.qq.com/user/get_user_info?access_token=" + url.QueryEscape(tok.AccessToken) + "&oauth_consumer_key=" + p.ClientId + "&openid=" + openid
+	fmt.Println(openid)
+	req := httplib.Get(uri)
+	req.SetTransport(social.DefaultTransport)
+
+	body, err := req.Bytes()
+	if err != nil {
+		return "", err
+	}
+	var temp = map[string]interface{}{}
+	if err = json.Unmarshal(body, &temp); err != nil {
+		return "", err
+	}
+	if err != nil {
+		return "", err
+	}
+	//目前暂时取昵称
+	nickname, ok := temp["nickname"].(string)
+	if !ok {
+		return "", fmt.Errorf("code: %v, msg: %v", temp["ret"], temp["msg"])
+	}
+
+	return "QQ_" + nickname, nil
+}
+
 var _ social.Provider = new(QQ)
 
 func NewQQ(clientId, secret string) *QQ {

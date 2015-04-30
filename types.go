@@ -28,6 +28,7 @@ type Provider interface {
 	GetPath() string
 	GetIndentify(*Token) (string, error)
 	CanConnect(*Token, *UserSocial) (bool, error)
+	GetUserNname(*Token) (string, error) //userNname 格式："来源平台_用户名"
 }
 
 // Interface of social utils

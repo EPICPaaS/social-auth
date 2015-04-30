@@ -73,6 +73,11 @@ func (p *Facebook) GetIndentify(tok *social.Token) (string, error) {
 	return fmt.Sprint(vals["id"]), nil
 }
 
+//TODO 待完善
+func (p *Facebook) GetUserNname(tok *social.Token) (string, error) {
+	return "", nil
+}
+
 var _ social.Provider = new(Facebook)
 
 func NewFacebook(clientId, secret string) *Facebook {
