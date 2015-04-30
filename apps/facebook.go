@@ -74,7 +74,7 @@ func (p *Facebook) GetIndentify(tok *social.Token) (string, error) {
 }
 
 //TODO 待完善
-func (p *Facebook) GetUserNname(tok *social.Token) (string, error) {
+func (p *Facebook) GetUserInfo(tok *social.Token) (string, error) {
 	return "", nil
 }
 

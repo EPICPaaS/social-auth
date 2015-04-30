@@ -41,7 +41,7 @@ func (p *Dropbox) GetIndentify(tok *social.Token) (string, error) {
 }
 
 //TODO 待完善
-func (p *Dropbox) GetUserNname(tok *social.Token) (string, error) {
+func (p *Dropbox) GetUserInfo(tok *social.Token) (string, error) {
 	return "", nil
 }
 
