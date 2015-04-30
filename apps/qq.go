@@ -66,7 +66,7 @@ func (p *QQ) GetIndentify(tok *social.Token) (string, error) {
 	return dataMap["openid"], nil
 }
 
-func (p *QQ) GetUserNname(tok *social.Token) (string, error) {
+func (p *QQ) GetUserInfo(tok *social.Token) (string, error) {
 
 	openid, err := p.GetIndentify(tok)
 	if err != nil {
@@ -74,7 +74,7 @@ func (p *QQ) GetUserNname(tok *social.Token) (string, error) {
 	}
 
 	uri := "https://graph.qq.com/user/get_user_info?access_token=" + url.QueryEscape(tok.AccessToken) + "&oauth_consumer_key=" + p.ClientId + "&openid=" + openid
-	fmt.Println(openid)
+
 	req := httplib.Get(uri)
 	req.SetTransport(social.DefaultTransport)
 

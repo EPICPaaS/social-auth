@@ -17,7 +17,10 @@
 package apps
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/EPICPaaS/social-auth"
+	"github.com/astaxie/beego/httplib"
 )
 
 type Weibo struct {
@@ -41,8 +44,29 @@ func (p *Weibo) GetIndentify(tok *social.Token) (string, error) {
 }
 
 //TODO 待完善
-func (p *Weibo) GetUserNname(tok *social.Token) (string, error) {
-	return "", nil
+func (p *Weibo) GetUserInfo(tok *social.Token) (string, error) {
+
+	uri := "https://api.weibo.com/2/users/show.json?source=" + p.ClientId + "&access_token=" + tok.AccessToken + "&uid=" + tok.GetExtra("uid")
+	req := httplib.Get(uri)
+	req.SetTransport(social.DefaultTransport)
+
+	body, err := req.Bytes()
+	if err != nil {
+		return "", err
+	}
+
+	var ret = map[string]interface{}{}
+	if err := json.Unmarshal(body, &ret); err != nil {
+		return "", err
+	}
+
+	userName, ok := ret["screen_name"].(string)
+	if !ok {
+		if userName, ok = ret["name"].(string); !ok {
+			return "", fmt.Errorf("error_code:%v , [ERROR]: %v", ret["error_code"], ret["error"])
+		}
+	}
+	return "新浪微博_" + userName, nil
 }
 
 var _ social.Provider = new(Weibo)

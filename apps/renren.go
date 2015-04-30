@@ -17,9 +17,8 @@
 package apps
 
 import (
-	//"fmt"
-
 	"encoding/json"
+	"fmt"
 	"github.com/EPICPaaS/social-auth"
 	"github.com/astaxie/beego/httplib"
 	"net/url"
@@ -70,8 +69,35 @@ func (p *Renren) GetIndentify(tok *social.Token) (string, error) {
 }
 
 //TODO 待完善
-func (p *Renren) GetUserNname(tok *social.Token) (string, error) {
-	return "", nil
+func (p *Renren) GetUserInfo(tok *social.Token) (string, error) {
+
+	userId, err := p.GetIndentify(tok)
+	if err != nil {
+		return "", err
+	}
+
+	uri := "https://api.renren.com/v2/user/get?access_token=" + tok.AccessToken + "&userId=" + userId
+	req := httplib.Get(uri)
+	req.SetTransport(social.DefaultTransport)
+
+	body, err := req.Bytes()
+	if err != nil {
+		return "", err
+	}
+
+	var ret = map[string]interface{}{}
+	if err := json.Unmarshal(body, &ret); err != nil {
+		return "", err
+	}
+	user := ret["response"].(map[string]interface{})
+	userName, ok := user["Name"].(string)
+	if !ok {
+		userName, ok = user["name"].(string)
+		if !ok {
+			return "", fmt.Errorf("get renren user [Error] %v", user)
+		}
+	}
+	return "人人网_" + userName, nil
 }
 
 var _ social.Provider = new(Renren)
