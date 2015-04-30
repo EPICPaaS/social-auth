@@ -73,8 +73,30 @@ func (p *Github) GetIndentify(tok *social.Token) (string, error) {
 }
 
 //TODO 待完善
-func (p *Github) GetUserNname(tok *social.Token) (string, error) {
-	return "", nil
+func (p *Github) GetUserInfo(tok *social.Token) (string, error) {
+
+	uri := "https://api.github.com/user?access_token=" + tok.AccessToken
+	req := httplib.Get(uri)
+	req.SetTransport(social.DefaultTransport)
+
+	body, err := req.Bytes()
+	if err != nil {
+		return "", err
+	}
+	fmt.Println(string(body))
+	var ret = map[string]interface{}{}
+	if err := json.Unmarshal(body, &ret); err != nil {
+		return "", err
+	}
+
+	userName, ok := ret["name"].(string)
+	if !ok {
+		userName, ok = ret["login"].(string)
+		if !ok {
+			return "", fmt.Errorf("get github user [Error] %v", "request not valid")
+		}
+	}
+	return "github_" + userName, nil
 }
 
 var _ social.Provider = new(Github)
