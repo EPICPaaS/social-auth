@@ -73,7 +73,7 @@ func (p *Google) GetIndentify(tok *social.Token) (string, error) {
 }
 
 //TODO 待完善
-func (p *Google) GetUserNname(tok *social.Token) (string, error) {
+func (p *Google) GetUserInfo(tok *social.Token) (string, error) {
 	return "", nil
 }
 

@@ -64,7 +64,7 @@ func (p *Weixin) GetIndentify(tok *social.Token) (string, error) {
 }
 
 //TODO 待完善
-func (p *Weixin) GetUserNname(tok *social.Token) (string, error) {
+func (p *Weixin) GetUserInfo(tok *social.Token) (string, error) {
 	return "", nil
 }
 
